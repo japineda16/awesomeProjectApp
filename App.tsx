@@ -1,16 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
 import { Box, NativeBaseProvider } from 'native-base';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 import Login from './src/auth/Login';
+import Client from './src/Client/Client';
+import ClientList from './src/ClientList/ClientList';
+import OrderList from './src/OrderList/OrderList';
+import Product from './src/product/Product';
+import ProductList from './src/productList/ProductList';
 
 export default function App() {
   return (
     <NativeBaseProvider>
       <Box flex='1'>
-        <SafeAreaView>
-          <Login></Login>
-        </SafeAreaView>
+        <OrderList></OrderList>
       </Box>
     </NativeBaseProvider>
   );

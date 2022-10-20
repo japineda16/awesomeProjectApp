@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Text, Box, ScrollView, View, Input, Button, Icon } from 'native-base';
+import { Text, Box, ScrollView, View, Input, Button } from 'native-base';
 import { useState } from 'react';
 
 export default function Login() {
@@ -15,7 +15,7 @@ export default function Login() {
     }
 
   return (
-    <View>
+    <View flex='1' flexDirection='column' justifyContent='center'>
         <ScrollView>
             <Box marginTop='1/2' width='75%' marginLeft='12.5%'>
                 <Text fontSize='3xl' textAlign='center'>Iniciar sesión</Text>
