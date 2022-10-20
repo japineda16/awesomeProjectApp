@@ -12,7 +12,7 @@ export default function Order()  {
                     <Text fontSize='2xl' marginBottom={3}>Listado de ventas</Text>
                     <Divider></Divider>
                     <ScrollView height='full'>
-                        <Box>
+                        <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text fontSize='xl' fontWeight='bold'>
                                     Orden #12345
@@ -22,7 +22,7 @@ export default function Order()  {
                             </Box>
                             <Divider></Divider>
                         </Box>
-                        <Box>
+                        <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text fontSize='xl' fontWeight='bold'>
                                     Orden #67089
@@ -32,7 +32,7 @@ export default function Order()  {
                             </Box>
                             <Divider></Divider>
                         </Box>
-                        <Box>
+                        <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text fontSize='xl' fontWeight='bold'>
                                     Orden #12345
