@@ -17,7 +17,7 @@ export default function Login() {
   return (
     <View flex='1' flexDirection='column' justifyContent='center'>
         <ScrollView>
-            <Box marginTop='1/2' width='75%' marginLeft='12.5%'>
+            <Box marginTop='1/3' width='75%' marginLeft='12.5%'>
                 <Text fontSize='3xl' textAlign='center'>Iniciar sesión</Text>
                 <Text fontSize='xl' textAlign='center'>
                     Para ingresar al sistema y ver el listado de productos, por favor, 
@@ -29,7 +29,7 @@ export default function Login() {
                 <Input variant="rounded" marginTop='2' 
                 onChangeText={(value) => handleForm('password', value)}
                 size="xl" placeholder="Contraseña" type='password' />
-                <Button marginTop='4'>
+                <Button marginTop='4' borderRadius='full'>
                     <Text color='white' fontSize='xl' onPress={() => {onLogin()}}>Iniciar sesión</Text>
                 </Button>
             </Box>

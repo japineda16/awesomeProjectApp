@@ -1,20 +1,21 @@
 import { Box, Divider, Heading, Text, Icon, ScrollView } from "native-base";
 import { StyleSheet } from "react-native";
 
-export default function Order()  {
+export default function Order({ navigation })  {
     return (
         <>
             <Box backgroundColor='blueGray.100' 
             flex={1}
-            flexDirection='column'
-            safeArea>
+            flexDirection='column' marginY='2.5'>
                 <Box style={styles.body}>
                     <Text fontSize='2xl' marginBottom={3}>Listado de ventas</Text>
                     <Divider></Divider>
                     <ScrollView height='full'>
                         <Box padding={0.5}>
                             <Box marginY={5}>
-                                <Text fontSize='xl' fontWeight='bold'>
+                                <Text onPress={() => {
+                                    navigation.navigate('Orden');
+                                }} fontSize='xl' fontWeight='bold'>
                                     Orden #12345
                                 </Text>
                                 <Text>Cliente: Jose Pineda</Text>

@@ -1,17 +1,18 @@
 import { Box, NativeBaseProvider } from 'native-base';
 import { StyleSheet } from 'react-native';
-import Login from './src/auth/Login';
-import Client from './src/Client/Client';
-import ClientList from './src/ClientList/ClientList';
-import OrderList from './src/OrderList/OrderList';
-import Product from './src/product/Product';
-import ProductList from './src/productList/ProductList';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { TabsNavigator } from './src/navigator/Navigator';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NativeBaseProvider>
       <Box flex='1'>
-        <OrderList></OrderList>
+        <NavigationContainer>
+          <TabsNavigator></TabsNavigator>
+        </NavigationContainer>
       </Box>
     </NativeBaseProvider>
   );

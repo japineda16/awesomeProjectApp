@@ -5,14 +5,9 @@ import { StyleSheet } from "react-native";
 export default function Product() {
     return (
         <>
-        <Box flex='1' flexDirection='row' safeArea>
+        <Box flex='1' flexDirection='row'>
             <Box width='full'>
-                <Heading 
-                style={styles.heading}
-                >
-                    <Text fontSize='3xl' width='100%'>Informacion</Text>
-                </Heading>
-                <Divider mt='2' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
+                <Divider mt='1' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                 <ScrollView backgroundColor='gray.50'>
                     <Box style={styles.bodyBox}>
                         <Text fontSize='2xl'>Harina Pan</Text>

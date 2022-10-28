@@ -2,20 +2,22 @@ import { Box, Text, Image, Heading, Divider, ScrollView, Icon } from "native-bas
 import { StyleSheet } from "react-native";
 
 
-export default function ClientList() {
+export default function ClientList({ navigation }) {
     return (
         <>
-        <Box flex='1' flexDirection='row' safeArea>
+        <Box flex='1' flexDirection='row'>
             <Box width='full'>
                 <Heading 
                 style={styles.heading}
                 >
                     <Text fontSize='3xl' width='100%'>Lista de clientes</Text>
                 </Heading>
-                <Divider mt='2' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
+                <Divider _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                 <ScrollView backgroundColor='gray.50' marginTop='2'>
                     <Box backgroundColor='gray.100' width='full' padding='6'>
-                        <Text fontSize='xl' bold>Jose Pineda</Text>
+                        <Text fontSize='xl' onPress={() => {
+                            navigation.navigate('Cliente');
+                        }} bold>Jose Pineda</Text>
                         <Text fontSize='md'>Carabobo, valencia</Text>
                     </Box>
                     <Divider width='100%' marginX='auto' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
@@ -39,7 +41,7 @@ export default function ClientList() {
 const styles = StyleSheet.create({
     heading: {
         width: '100%',
-        marginHorizontal: '5%',
+        paddingHorizontal: '5%',
         paddingVertical: '3%',
         backgroundColor: 'white'
     },
