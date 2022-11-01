@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 import Login from "../auth/Login";
 import Client from "../Client/Client";
 import ClientList from "../ClientList/ClientList";
@@ -63,7 +64,12 @@ const routes = [
 export function TabsNavigator() {
     return (
         <Tab.Navigator>
-            <Tab.Screen name='Lista-de-productos' options={{title: 'Lista de productos'}} component={ProductList} />
+            <Tab.Screen name='Inicio de sesion' component={Login} />
+            <Tab.Screen name='Lista-de-productos' 
+            options={{
+                title: 'Lista de productos'
+            }} 
+            component={ProductList} />
             <Tab.Screen name='Producto' options={{
                 tabBarItemStyle: {display: 'none'}
             }} component={Product} />
@@ -75,7 +81,6 @@ export function TabsNavigator() {
                 tabBarItemStyle: {display: 'none'}
             }} component={Client} />
             <Tab.Screen name='Lista de clientes' component={ClientList} />
-            <Tab.Screen name='Inicio de sesion' component={Login} />
         </Tab.Navigator>
     );
 }
