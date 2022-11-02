@@ -2,7 +2,8 @@ import { Box, Text, Image, Heading, Divider, ScrollView, Icon } from "native-bas
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from "react-native";
 
-export default function Product() {
+export default function Product({ navigation, route }: any) {
+    console.log(route.params);
     return (
         <>
         <Box flex='1' flexDirection='row'>

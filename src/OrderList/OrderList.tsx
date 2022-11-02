@@ -1,21 +1,21 @@
-import { Box, Divider, Heading, Text, Icon, ScrollView } from "native-base";
+import { Box, Divider, Text, ScrollView } from "native-base";
 import { StyleSheet } from "react-native";
 
 export default function Order({ navigation })  {
     return (
         <>
-            <Box backgroundColor='blueGray.100' 
+            <Box backgroundColor='white'
             flex={1}
-            flexDirection='column' marginY='2.5'>
+            flexDirection='column' py='2.5'>
                 <Box style={styles.body}>
-                    <Text fontSize='2xl' marginBottom={3}>Listado de ventas</Text>
+                    <Text fontSize='2xl' fontWeight='bold' marginBottom={3}>Listado de ventas</Text>
                     <Divider></Divider>
                     <ScrollView height='full'>
                         <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text onPress={() => {
                                     navigation.navigate('Orden');
-                                }} fontSize='xl' fontWeight='bold'>
+                                }} fontSize='xl' fontWeight='semibold'>
                                     Orden #12345
                                 </Text>
                                 <Text>Cliente: Jose Pineda</Text>
@@ -25,7 +25,7 @@ export default function Order({ navigation })  {
                         </Box>
                         <Box padding={0.5}>
                             <Box marginY={5}>
-                                <Text fontSize='xl' fontWeight='bold'>
+                                <Text fontSize='xl' fontWeight='semibold'>
                                     Orden #67089
                                 </Text>
                                 <Text>Cliente: Yorman Rodriguez</Text>
@@ -35,7 +35,7 @@ export default function Order({ navigation })  {
                         </Box>
                         <Box padding={0.5}>
                             <Box marginY={5}>
-                                <Text fontSize='xl' fontWeight='bold'>
+                                <Text fontSize='xl' fontWeight='semibold'>
                                     Orden #12345
                                 </Text>
                                 <Text>Cliente: Carlitos</Text>
