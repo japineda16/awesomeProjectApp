@@ -1,11 +1,28 @@
-import { Box, Text, Image, Heading, Divider, ScrollView, Icon } from "native-base";
-import { StyleSheet } from "react-native";
-
+import { Box, Text, Heading, Divider, ScrollView, Button, FlatList } from "native-base";
+import { useEffect, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
+import { ModalClient } from "./component/modelClient";
+import { getQuery } from "../services/query/query.service";
 
 export default function ClientList({ navigation }) {
+    const [buttonClient, setButtonClient] = useState(false);
+    const [clients, setClients] = useState([]);
+
+    const onInitClients = async () => {
+        const {data} = await getQuery('clients?page=1').catch((err) => {
+            Alert.alert('Error', 'Ha sucedido un error desconocido, vuelva a intentarlo.');
+            console.log(err);
+        });
+        setClients(data[1])
+    }
+    
+    useEffect( () => {
+        onInitClients();
+    }, []);
+
     return (
         <>
-        <Box flex='1' flexDirection='row'>
+        <Box flex='1' flexDirection='row' backgroundColor='white'>
             <Box width='full'>
                 <Heading 
                 style={styles.heading}
@@ -13,27 +30,23 @@ export default function ClientList({ navigation }) {
                     <Text fontSize='3xl' width='100%'>Lista de clientes</Text>
                 </Heading>
                 <Divider _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
-                <ScrollView backgroundColor='gray.50' marginTop='2'>
-                    <Box backgroundColor='gray.100' width='full' padding='6'>
+                <FlatList 
+                data={clients} renderItem={ ({item, index}) => 
+                    <Box backgroundColor={index % 2 ? 'gray.100' : 'white'} width='full' padding='6'>
                         <Text fontSize='xl' onPress={() => {
                             navigation.navigate('Cliente');
-                        }} bold>Jose Pineda</Text>
-                        <Text fontSize='md'>Carabobo, valencia</Text>
+                        }} bold>{item.name}</Text>
+                        <Text fontSize='md'>{item.address}</Text>
                     </Box>
-                    <Divider width='100%' marginX='auto' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
-                    <Box backgroundColor='gray.50' width='full' padding='6'>
-                        <Text fontSize='xl' bold>Yorman Rodriguez</Text>
-                        <Text fontSize='md'>Carabobo, valencia</Text>
-                    </Box>
-                    <Divider width='100%' marginX='auto' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
-                    <Box backgroundColor='gray.100' width='full' padding='6'>
-                        <Text fontSize='xl' bold>Carlitos</Text>
-                        <Text fontSize='md'>Carabobo, valencia</Text>
-                    </Box>
-                    <Divider width='100%' marginX='auto' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
-                </ScrollView>
+                }/>
+                <Button w='80' marginX='auto'
+                    marginBottom='4' 
+                    onPress={ () => {
+                    setButtonClient( buttonClient == false ? true : false)} 
+                    }>Añadir cliente</Button>
             </Box>
         </Box>
+        <ModalClient status={buttonClient} onClose={() => setButtonClient(false)}></ModalClient>
         </>
     );
 }

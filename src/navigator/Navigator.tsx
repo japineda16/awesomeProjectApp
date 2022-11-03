@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from "../auth/Login";
 import Client from "../Client/Client";
 import ClientList from "../ClientList/ClientList";
+import { CreateOrder } from '../createOrder/createOrder';
 import Order from "../Order/Order";
 import OrderList from "../OrderList/OrderList";
 import Product from "../product/Product";
@@ -29,6 +30,9 @@ export function TabsNavigator() {
                 tabBarItemStyle: {display: 'none'}
             }} component={Client} />
             <Tab.Screen name='Lista de clientes' component={ClientList} />
+            <Tab.Screen name='Crear-orden' options={{
+                tabBarItemStyle: {display: 'none'}
+            }} component={CreateOrder} />
         </Tab.Navigator>
     );
 }

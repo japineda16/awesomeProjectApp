@@ -1,7 +1,23 @@
-import { Box, Divider, Text, ScrollView } from "native-base";
-import { StyleSheet } from "react-native";
+import { Box, Divider, Text, ScrollView, FlatList } from "native-base";
+import { useEffect, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
+import { getQuery } from "../services/query/query.service";
 
 export default function Order({ navigation })  {
+    const [orders, setOrders] = useState([]);
+
+    const getOrders = async () => {
+        const {data} = await getQuery('orders?page=1').catch( () => {
+            Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.')
+        } );
+        setOrders(data);
+        console.log(orders);
+    }
+
+    useEffect( () => {
+        getOrders();
+    }, []);
+
     return (
         <>
             <Box backgroundColor='white'
@@ -10,40 +26,20 @@ export default function Order({ navigation })  {
                 <Box style={styles.body}>
                     <Text fontSize='2xl' fontWeight='bold' marginBottom={3}>Listado de ventas</Text>
                     <Divider></Divider>
-                    <ScrollView height='full'>
+                    <FlatList marginBottom={16} data={orders} renderItem={ ({item, index}) => 
                         <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text onPress={() => {
                                     navigation.navigate('Orden');
                                 }} fontSize='xl' fontWeight='semibold'>
-                                    Orden #12345
+                                    Orden {item.orderNumber}
                                 </Text>
                                 <Text>Cliente: Jose Pineda</Text>
                                 <Text>Dirección: Naguanagua, Tazajal.</Text>
                             </Box>
                             <Divider></Divider>
                         </Box>
-                        <Box padding={0.5}>
-                            <Box marginY={5}>
-                                <Text fontSize='xl' fontWeight='semibold'>
-                                    Orden #67089
-                                </Text>
-                                <Text>Cliente: Yorman Rodriguez</Text>
-                                <Text>Dirección: Guacara.</Text>
-                            </Box>
-                            <Divider></Divider>
-                        </Box>
-                        <Box padding={0.5}>
-                            <Box marginY={5}>
-                                <Text fontSize='xl' fontWeight='semibold'>
-                                    Orden #12345
-                                </Text>
-                                <Text>Cliente: Carlitos</Text>
-                                <Text>Dirección: Guacara.</Text>
-                            </Box>
-                            <Divider></Divider>
-                        </Box>
-                    </ScrollView>
+                } />
                 </Box>
             </Box>
         </>

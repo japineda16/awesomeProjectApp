@@ -1,10 +1,10 @@
-import { Text, Box, ScrollView, Image, Divider, Button, FlatList, Input, IconButton, Icon } from 'native-base';
+import { Text, Box, ScrollView, Image, Divider, Button, FlatList, Input, IconButton, Icon, Fab } from 'native-base';
 import { useEffect, useState } from 'react';
 import { RefreshControl } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { getQuery } from '../services/query/query.service';
 
-export default function ProductList({ navigation }) {
+export default function ProductList({ navigation, route }) {
 
     const [product, setProducts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -22,19 +22,23 @@ export default function ProductList({ navigation }) {
 
     const displayReportButton = () => {
         if (Object.keys(cart).length != 0) {
-            return (<Button width='60%' 
+            return (<Fab
                     onPress={() => createOrder()}
-                    borderRadius='full' 
-                    marginX='auto'>Crear orden</Button>);
+                    borderRadius='full'
+                    right='25%' w='1/2' bottom='10%' label={
+                        <Text color='white' fontSize='md'>Crear orden</Text>
+                    } />);
         }
     }
 
     const createOrder = () => {
-        const products: any[] = [];
+        let products: any[] = [];
         for (let item of cart) {
             products.push(product[item]);
         }
-        console.log(products);
+        navigation.navigate('Crear-orden', products);
+        products = [];
+        getProducts();
     }
 
     const addToCart = (id: string, quantity: number, index: number, item: JSON) => {
@@ -51,7 +55,7 @@ export default function ProductList({ navigation }) {
             borderRadius='full'>Ordenar</Button>)
         } else {
             return (
-                <NumericInput maxValue={quantity} onChange={ value => {
+                <NumericInput minValue={0} maxValue={quantity} onChange={ value => {
                     product[index].cart = value;
                 } }></NumericInput>
             )
@@ -69,7 +73,7 @@ export default function ProductList({ navigation }) {
         <Box flex='1' backgroundColor='white'>
             <Box>
                 <FlatList
-                    height='90%'
+                    height='full'
                     data={product}
                     renderItem={ ({item, index}) => 
                         <Box paddingX='25px' flex='2' marginTop='2.5' flexDirection='row' flexWrap='wrap'>
