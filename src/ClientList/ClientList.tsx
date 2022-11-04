@@ -1,12 +1,13 @@
 import { Box, Text, Heading, Divider, ScrollView, Button, FlatList } from "native-base";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, RefreshControl, StyleSheet } from "react-native";
 import { ModalClient } from "./component/modelClient";
 import { getQuery } from "../services/query/query.service";
 
 export default function ClientList({ navigation }) {
     const [buttonClient, setButtonClient] = useState(false);
     const [clients, setClients] = useState([]);
+    const [refreshing, setRefresh] = useState(false);
 
     const onInitClients = async () => {
         const {data} = await getQuery('clients?page=1').catch((err) => {
@@ -38,7 +39,13 @@ export default function ClientList({ navigation }) {
                         }} bold>{item.name}</Text>
                         <Text fontSize='md'>{item.address}</Text>
                     </Box>
-                }/>
+                }
+                refreshControl={
+                    <RefreshControl 
+                    onRefresh={onInitClients}
+                    refreshing={refreshing}/>
+                }
+                />
                 <Button w='80' marginX='auto'
                     marginBottom='4' 
                     onPress={ () => {

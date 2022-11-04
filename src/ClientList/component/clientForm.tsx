@@ -11,22 +11,22 @@ export const ClientForm = ({onForm}) => {
     const validate = () => {
         setErrors({});
         if (formData.name === undefined) {
-          setErrors({ ...errors,
+          setErrors({ 
             name: 'El nombre es necesario.'
           });
           return false;
         } else if (formData.email === undefined) {
-          setErrors({ ...errors,
+          setErrors({ 
             email: 'El correo es necesario.'
           });
           return false;
         } else if (formData.phone === undefined) {
-            setErrors({ ...errors,
+            setErrors({ 
               phone: 'El numero de telefono es necesario.'
             });
             return false;
         } else if (formData.address === undefined) {
-            setErrors({ ...errors,
+            setErrors({ 
               address: 'La dirección es necesario.'
             });
             return false;

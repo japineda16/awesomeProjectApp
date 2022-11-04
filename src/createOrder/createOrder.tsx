@@ -33,11 +33,11 @@ export const CreateOrder = ({route, navigation}) => {
         toast.show({
             render: () => {
                 return <Box backgroundColor='success.500' px={4} py={3}>
-                    <Text color='white'>Se ha creado exitosamente la orden.</Text>
+                    <Text color='white'>Se ha creado exitosamente la orden {query.data.orderNumber} .</Text>
                 </Box>
             }
         });
-        navigation.navigate('Lista-de-productos');
+        navigation.navigate('Lista de ordenes');
     }
 
     useEffect( () => {

@@ -1,6 +1,6 @@
 import { Text, Box, ScrollView, Image, Divider, Button, FlatList, Input, IconButton, Icon, Fab } from 'native-base';
 import { useEffect, useState } from 'react';
-import { RefreshControl } from 'react-native';
+import { Alert, RefreshControl } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
 import { getQuery } from '../services/query/query.service';
 
@@ -13,7 +13,8 @@ export default function ProductList({ navigation, route }) {
     const getProducts = async () => {
         setRefreshing(true);
         let {data} = await getQuery('products?page=1').catch((err) => {
-            console.log(err);
+            setRefreshing(false);
+            Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
         });
         setRefreshing(false);
         setCart([]);

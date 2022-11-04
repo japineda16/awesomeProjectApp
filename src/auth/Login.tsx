@@ -7,20 +7,24 @@ import { postQuery, saveStorageItem } from '../services/query/query.service';
 export default function Login({ navigation }) {
 
     const [userData, setUserData] = useState({email: '', password: '', invalid: false});
+    const [isLoading, setLoading] = useState(false);
 
     const handleForm = (name: string, value: string) => {
         setUserData({...userData, [name]: value});
     }
 
     const onLogin = async () => {
+        setLoading(true);
         if (userData.email !== "" || userData.email !== "") {
           postQuery('auth/login', userData).then(async (res) => {
+            setLoading(false);
             if (res.status == 200) {
               saveStorageItem('accessToken', res.data.accessToken);
               saveStorageItem('refreshToken', res.data.refreshToken);
               navigation.navigate('Lista-de-productos');
             }
           }).catch((err) => {
+            setLoading(false);
             if (err.response.status != 401) {
               Alert.alert('Error desconocido', 'Ha habido un problema desconocido, por favor vuelva a intentarlo.');
             }
@@ -30,6 +34,7 @@ export default function Login({ navigation }) {
           });
         }
         if (userData.email === "" || userData.email === "") {
+          setLoading(false);
           console.log('No has llenado uno de estos datos');
           setUserData({...userData, invalid: false});
         }
@@ -50,8 +55,12 @@ export default function Login({ navigation }) {
                 <Input variant="rounded" marginTop='2'
                 onChangeText={(value) => handleForm('password', value)}
                 size="xl" placeholder="Contraseña" type='password' />
-                <Button marginTop='4' borderRadius='full'>
-                    <Text color='white' fontSize='xl' onPress={() => {onLogin()}}>Iniciar sesión</Text>
+                <Button 
+                  onPress={() => {onLogin()}}
+                  marginTop='4'
+                  isLoading={isLoading}
+                  borderRadius='full'>
+                    <Text color='white' fontSize='xl'>Iniciar sesión</Text>
                 </Button>
             </Box>
         </ScrollView>
