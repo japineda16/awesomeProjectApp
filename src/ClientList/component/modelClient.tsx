@@ -42,7 +42,7 @@ export const ModalClient = ({status, onClose}) => {
             <Modal.CloseButton></Modal.CloseButton>
                 <Modal.Header>Crear nuevo cliente</Modal.Header>
                 <Modal.Body>
-                    <ClientForm onForm={onForm}></ClientForm>
+                    <ClientForm isLoading={false} onForm={onForm}></ClientForm>
                 </Modal.Body>
             </Modal.Content>
         </Modal>

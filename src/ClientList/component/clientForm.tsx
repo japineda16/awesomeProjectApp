@@ -3,7 +3,7 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 
-export const ClientForm = ({onForm}) => {
+export const ClientForm = ({onForm, isLoading}) => {
 
     const [formData, setData] = useState({});
     const [errors, setErrors] = useState({});
@@ -35,6 +35,7 @@ export const ClientForm = ({onForm}) => {
       };
 
       const onSubmit = () => {
+        setLoading(true);
         if (validate()) {
             onForm(formData);
             setData({});
@@ -90,7 +91,7 @@ export const ClientForm = ({onForm}) => {
                         })} />
                         { "address" in errors ? <Text color='red.600' fontSize='sm'>{errors.address}</Text> : null }
                 </Box>
-                <Button mt='1.5' onPress={onSubmit}>Crear cliente</Button>
+                <Button mt='1.5' isLoading={isLoading} onPress={onSubmit}>Crear cliente</Button>
             </FormControl>
     );
 }
