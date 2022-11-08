@@ -1,12 +1,17 @@
-import { Box, Text, Image, Heading, Divider, ScrollView, Icon } from "native-base";
+import { Box, Text, Image, Heading, Divider, ScrollView, Icon, Button } from "native-base";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from "react-native";
+import { useState } from "react";
 
 export default function Product({ navigation, route }: any) {
+    const [statusCart, onStatusCart] = useState(false);
+
+
+
     console.log(route.params);
     return (
         <>
-        <Box flex='1' flexDirection='row'>
+        <Box flex='1' flexDirection='row' paddingX='2.5'>
             <Box width='full'>
                 <Divider mt='1' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                 <ScrollView backgroundColor='gray.50'>
@@ -45,6 +50,14 @@ export default function Product({ navigation, route }: any) {
                             </Box>
                         </Box>
                     </Box>
+                    <Box marginX='4%' marginY='3%'>
+                        <Box display={statusCart ? 'none' : 'block'}>
+                            <Button onPress={() => onStatusCart(true)}>Agregar al carrito</Button>
+                        </Box>
+                        <Box display={!statusCart ? 'none' : 'block'}>
+                            <Button onPress={() => onStatusCart(false)}>Eliminar del carrtio</Button>
+                        </Box>
+                    </Box>
                     <Divider width='95%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                     <Box style={styles.descriptionBody}>
                         <Text>
@@ -71,10 +84,10 @@ const styles = StyleSheet.create({
         marginHorizontal: '10%'
     },
     boxesStyles: {
-        paddingHorizontal: '5%%',
+        paddingHorizontal: '4%%',
         paddingVertical: '3%',
         width: '40%',
-        marginHorizontal: '5%',
+        marginHorizontal: '4%',
         marginVertical: '2%',
         borderRadius: 10
     },
