@@ -1,17 +1,19 @@
-import { Box, Text, Image, Heading, Divider, ScrollView, Icon, Button } from "native-base";
+import { Box, Text, Image, Heading, Divider, ScrollView, Icon, Button, Select } from "native-base";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from "react-native";
 import { useState } from "react";
+import NumericInput from "react-native-numeric-input";
 
 export default function Product({ navigation, route }: any) {
     const [statusCart, onStatusCart] = useState(false);
+    const [select, setSelect] = useState('');
 
 
 
     console.log(route.params);
     return (
         <>
-        <Box flex='1' flexDirection='row' paddingX='2.5'>
+        <Box flex='1' flexDirection='row'>
             <Box width='full'>
                 <Divider mt='1' _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                 <ScrollView backgroundColor='gray.50'>
@@ -55,7 +57,20 @@ export default function Product({ navigation, route }: any) {
                             <Button onPress={() => onStatusCart(true)}>Agregar al carrito</Button>
                         </Box>
                         <Box display={!statusCart ? 'none' : 'block'}>
-                            <Button onPress={() => onStatusCart(false)}>Eliminar del carrtio</Button>
+                            <Box flex='2' flexDirection='row' my='2.5'>
+                                <Box w='1/2'>
+                                    <Select placeholder="Selecciona un precio" selectedValue={select}
+                                        onValueChange={(item) => setSelect(item)}>
+                                        <Select.Item label="10$" value="10$"/>
+                                        <Select.Item label="12$" value="12$"/>
+                                        <Select.Item label="11$" value="11$"/>
+                                    </Select>
+                                </Box>
+                                <Box ml='1/6'>
+                                    <NumericInput onChange={(value) => console.log(value)}></NumericInput>
+                                </Box>
+                            </Box>
+                            <Button bgColor='red.500' onPress={() => onStatusCart(false)}>Eliminar del carrtio</Button>
                         </Box>
                     </Box>
                     <Divider width='95%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
