@@ -7,10 +7,20 @@ import NumericInput from "react-native-numeric-input";
 export default function Product({ navigation, route }: any) {
     const [statusCart, onStatusCart] = useState(false);
     const [select, setSelect] = useState('');
+    const [isLoading, setLoading] = useState(false);
+    const [cart, setCart] = useState({item: '', quantity: 0, price: 0});
+
+    const onCartChange = (input: string, data: any) => {
+        setCart({...cart, [input]: data});
+    }
+    
+    const onDeleteCart = () => {
+        setCart({item: '', quantity: 0, price: 0})
+        onStatusCart(false);
+    }
+    console.log(cart);
 
 
-
-    console.log(route.params);
     return (
         <>
         <Box flex='1' flexDirection='row'>
@@ -57,20 +67,23 @@ export default function Product({ navigation, route }: any) {
                             <Button onPress={() => onStatusCart(true)}>Agregar al carrito</Button>
                         </Box>
                         <Box display={!statusCart ? 'none' : 'block'}>
-                            <Box flex='2' flexDirection='row' my='2.5'>
-                                <Box w='1/2'>
-                                    <Select placeholder="Selecciona un precio" selectedValue={select}
-                                        onValueChange={(item) => setSelect(item)}>
+                            <Box flex='2' flexDirection='row' my='2.5' mb='3.5'>
+                                <Box w='1/2' mt='auto' mb='auto'>
+                                    <Select height='12' placeholder="Selecciona un precio" selectedValue={cart.price}
+                                        onValueChange={(item) => {
+                                            onCartChange('price', item);
+                                            setSelect(item)
+                                        }}>
                                         <Select.Item label="10$" value="10$"/>
                                         <Select.Item label="12$" value="12$"/>
                                         <Select.Item label="11$" value="11$"/>
                                     </Select>
                                 </Box>
-                                <Box ml='1/6'>
-                                    <NumericInput onChange={(value) => console.log(value)}></NumericInput>
+                                <Box ml='8%'>
+                                    <NumericInput initValue={cart.quantity} value={cart.quantity} onChange={(value) => onCartChange('quantity', value)}></NumericInput>
                                 </Box>
                             </Box>
-                            <Button bgColor='red.500' onPress={() => onStatusCart(false)}>Eliminar del carrtio</Button>
+                            <Button bgColor='red.500' onPress={() => onDeleteCart()}>Eliminar del carrtio</Button>
                         </Box>
                     </Box>
                     <Divider width='95%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
