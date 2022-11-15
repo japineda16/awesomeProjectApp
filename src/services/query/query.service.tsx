@@ -17,10 +17,10 @@ export const deleteQuery = (uri: string, params?: any, settings?: any): Promise<
     return axios.get('https://api-demo-ventas.katalogo.vip/' + uri, settings);
 }
 
-export const getStorageItem = async (key: string): Promise<any> => {
-    return SecureStore.getItemAsync(key);
+export const getStorageItem = async (key: string) => {
+    return await SecureStore.getItemAsync(key);
 }
 
-export const saveStorageItem = (key: string, data: any): Promise<any> => {
-    return SecureStore.setItemAsync(key, data);
+export const saveStorageItem = async (key: string, data: any) => {
+    return await SecureStore.setItemAsync(key, data);
 }

@@ -2,23 +2,25 @@ import { Text, Box, ScrollView, Image, Divider, Button, FlatList, Input, IconBut
 import { useEffect, useState } from 'react';
 import { Alert, RefreshControl } from 'react-native';
 import NumericInput from 'react-native-numeric-input';
-import { getQuery } from '../services/query/query.service';
+import { getQuery, getStorageItem } from '../services/query/query.service';
 
 export default function ProductList({ navigation, route }) {
 
     const [product, setProducts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [cart, setCart] = useState([]);
+    let [page, setPage] = useState(1);
 
     const getProducts = async () => {
+        const userId = await getStorageItem('userId');
         setRefreshing(true);
-        let {data} = await getQuery('products?page=1').catch((err) => {
+        const {data} = await getQuery('products/user-product/' + userId +'?page=' + page).catch((err) => {
             setRefreshing(false);
             Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
         });
         setRefreshing(false);
         setCart([]);
-        setProducts([...data[1]]);
+        setProducts([...data]);
     }
 
     const displayReportButton = () => {
@@ -30,6 +32,11 @@ export default function ProductList({ navigation, route }) {
                         <Text color='white' fontSize='md'>Crear orden</Text>
                     } />);
         }
+    }
+
+    const onScroll = () => {
+        setPage(page++);
+        console.log(page);
     }
 
     const createOrder = () => {
@@ -79,18 +86,19 @@ export default function ProductList({ navigation, route }) {
                     renderItem={ ({item, index}) => 
                         <Box paddingX='25px' flex='2' marginTop='2.5' flexDirection='row' flexWrap='wrap'>
                             <Box maxWidth='50%'>
-                                <Text fontSize='2xl' bold onPress={() => {
-                                    navigation.navigate('Producto', {id: item});
-                                }}>
-                                    {item.name}
-                                </Text>
-                                <Text fontSize='md'>
-                                    Precio de venta: {item.price}
-                                </Text>
-                                <Text>
-                                    Disponible: {item.quantity}
-                                </Text>
-                                {onActionAdToCart(item, index, item.quantity)}
+                                <Box my='auto'>
+                                    <Text fontSize='2xl' bold onPress={() => {
+                                        navigation.navigate('Producto', {id: item});
+                                    }}>
+                                        {item.product.name}
+                                    </Text>
+                                    <Text fontSize='md'>
+                                        Precio general: {item.product.price}
+                                    </Text>
+                                    <Text>
+                                        Disponible: {item.product.quantity}
+                                    </Text>
+                                </Box>
                             </Box>
                             <Box maxWidth='50%' marginLeft='auto'>
                                 <Image
@@ -101,6 +109,8 @@ export default function ProductList({ navigation, route }) {
                             <Divider my={2} />
                         </Box>
                     }
+                    onEndReached={onScroll}
+                    onEndReachedThreshold={0}
                     refreshControl={
                         <RefreshControl
                         refreshing={refreshing}

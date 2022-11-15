@@ -1,13 +1,28 @@
 import { StyleSheet } from 'react-native';
 import { Text, Box, ScrollView, View, Input, Button } from 'native-base';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from "react-native";
-import { postQuery, saveStorageItem } from '../services/query/query.service';
+import { getStorageItem, postQuery, saveStorageItem } from '../services/query/query.service';
 
 export default function Login({ navigation }) {
 
     const [userData, setUserData] = useState({email: '', password: '', invalid: false});
     const [isLoading, setLoading] = useState(false);
+    const [loadingAlert, setLoadingAlert] = useState(true);
+
+    const checkSession = async () => {
+      const refreshToken = await getStorageItem('refreshToken') || undefined;
+      console.log(refreshToken);
+      if (refreshToken != undefined) {
+        let {data} = await postQuery('auth/token', {refreshToken: refreshToken}).catch( err => {
+          console.log(err);
+        });
+        saveStorageItem('accessToken', data.accessToken);
+        saveStorageItem('refreshToken', data.refreshToken);
+        saveStorageItem('userId', data.userId);
+        navigation.navigate('Lista-de-productos');
+      }
+    }
 
     const handleForm = (name: string, value: string) => {
         setUserData({...userData, [name]: value});
@@ -21,6 +36,7 @@ export default function Login({ navigation }) {
             if (res.status == 200) {
               saveStorageItem('accessToken', res.data.accessToken);
               saveStorageItem('refreshToken', res.data.refreshToken);
+              saveStorageItem('userId', res.data.userId);
               navigation.navigate('Lista-de-productos');
             }
           }).catch((err) => {
@@ -39,6 +55,13 @@ export default function Login({ navigation }) {
           setUserData({...userData, invalid: false});
         }
     }
+
+    useEffect(() => {
+      let verify = async () => {
+        await checkSession();
+      }
+      verify();
+    }, []);
 
   return (
     <View flex='1' flexDirection='column' justifyContent='center'>

@@ -18,7 +18,6 @@ export default function Product({ navigation, route }: any) {
         setCart({item: '', quantity: 0, price: 0})
         onStatusCart(false);
     }
-    console.log(cart);
 
 
     return (
