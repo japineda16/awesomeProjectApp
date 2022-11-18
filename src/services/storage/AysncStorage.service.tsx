@@ -17,3 +17,20 @@ export const readData = async (key: string) => {
       alert('Failed to fetch the input from storage');
     }
 };
+
+export const getAllData = async () => {
+    try {
+        const value = await AsyncStorage.getAllKeys();
+        return value;
+      } catch (e) {
+        alert('Failed to fetch the input from storage');
+      }
+}
+
+export const deleteData = async (key: string) => {
+    try {
+        await AsyncStorage.removeItem(key)
+      } catch(e) {
+        // remove error
+      }
+}

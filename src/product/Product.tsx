@@ -3,49 +3,25 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import NumericInput from "react-native-numeric-input";
-import {readData, saveData} from '../services/storage/AysncStorage.service'
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {deleteData, readData, saveData} from '../services/storage/AysncStorage.service'
 
 export default function Product({ navigation, route }: any) {
     const [statusCart, onStatusCart] = useState(false);
-    const [select, setSelect] = useState('');
-    const [isLoading, setLoading] = useState(false);
     const [cart, setCart] = useState({item: 'aaaa', quantity: 0, price: 0});
-    const [errors, setErrors] = useState({});
 
     const onCartChange = (input: string, data: any) => {
         setCart({...cart, [input]: data});
     }
     
-    const onDeleteCart = () => {
-        setCart({item: '', quantity: 0, price: 0})
+    const onDeleteCart = async () => {
+        deleteData(cart.item);
+        setCart({item: cart.item, quantity: 0, price: 0})
         onStatusCart(false);
     }
 
-    const findAndDelete = (item: string, actualCart: any) => {
-        for (const a of actualCart) {
-            
-        }
-    }
-
     const onAddCart = async () => {
-        let itemCarts: any = await readData('cartItem');
-        let allCart: any = await readData('allCart');
-        itemCarts = JSON.parse(itemCarts);
-        allCart = JSON.parse(allCart);
-        let items: any = [];
-        let actualCart: any = [];
-
-        if (itemCarts != null) items = itemCarts;
-        if (allCart != null) actualCart = allCart;
-
-        items.push(cart.item);
-        actualCart.push(cart);
-        items = JSON.stringify(items);
-        actualCart = JSON.stringify(actualCart);
-
-        let saveItem = await saveData('cartItem', items);
-        let saveCart = await saveData('allCart', actualCart);
+        saveData(cart.item, JSON.stringify(cart));
+        let data = await readData(cart.item);
     }
 
     return (
@@ -99,7 +75,6 @@ export default function Product({ navigation, route }: any) {
                                     <Select height='12' placeholder="Selecciona un precio" selectedValue={cart.price}
                                         onValueChange={(item) => {
                                             onCartChange('price', item);
-                                            setSelect(item)
                                         }}>
                                         <Select.Item label="10$" value="10$"/>
                                         <Select.Item label="12$" value="12$"/>
