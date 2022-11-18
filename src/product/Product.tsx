@@ -3,12 +3,15 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import NumericInput from "react-native-numeric-input";
+import {readData, saveData} from '../services/storage/AysncStorage.service'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Product({ navigation, route }: any) {
     const [statusCart, onStatusCart] = useState(false);
     const [select, setSelect] = useState('');
     const [isLoading, setLoading] = useState(false);
-    const [cart, setCart] = useState({item: '', quantity: 0, price: 0});
+    const [cart, setCart] = useState({item: 'aaaa', quantity: 0, price: 0});
+    const [errors, setErrors] = useState({});
 
     const onCartChange = (input: string, data: any) => {
         setCart({...cart, [input]: data});
@@ -19,6 +22,31 @@ export default function Product({ navigation, route }: any) {
         onStatusCart(false);
     }
 
+    const findAndDelete = (item: string, actualCart: any) => {
+        for (const a of actualCart) {
+            
+        }
+    }
+
+    const onAddCart = async () => {
+        let itemCarts: any = await readData('cartItem');
+        let allCart: any = await readData('allCart');
+        itemCarts = JSON.parse(itemCarts);
+        allCart = JSON.parse(allCart);
+        let items: any = [];
+        let actualCart: any = [];
+
+        if (itemCarts != null) items = itemCarts;
+        if (allCart != null) actualCart = allCart;
+
+        items.push(cart.item);
+        actualCart.push(cart);
+        items = JSON.stringify(items);
+        actualCart = JSON.stringify(actualCart);
+
+        let saveItem = await saveData('cartItem', items);
+        let saveCart = await saveData('allCart', actualCart);
+    }
 
     return (
         <>
@@ -82,7 +110,11 @@ export default function Product({ navigation, route }: any) {
                                     <NumericInput initValue={cart.quantity} value={cart.quantity} onChange={(value) => onCartChange('quantity', value)}></NumericInput>
                                 </Box>
                             </Box>
-                            <Button bgColor='red.500' onPress={() => onDeleteCart()}>Eliminar del carrtio</Button>
+                            <Box flex='2' flexDirection='row'>
+                                <Button w='48%' mx='1%' bgColor='red.500' onPress={() => onDeleteCart()}>Cancelar</Button>
+                                <Button w='48%' mx='1%' bgColor='blue.500' onPress={() => onAddCart()}>Agregar al carrtio</Button>
+                            </Box>
+
                         </Box>
                     </Box>
                     <Divider width='95%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />

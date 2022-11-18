@@ -14,12 +14,12 @@ export function TabsNavigator() {
     return (
         <Tab.Navigator>
             <Tab.Screen name='Producto' options={{
-                tabBarItemStyle: {display: 'none'}
+                tabBarItemStyle: {display: 'none'},
             }} component={Product} />
             <Tab.Screen name='Inicio-de-sesion' component={Login} options={{title: 'Inicio de sesión'}} />
             <Tab.Screen name='Lista-de-productos' 
             options={{
-                title: 'Lista de productos'
+                title: 'Lista de productos',
             }} 
             component={ProductList} />
             <Tab.Screen name='Lista de ordenes' component={OrderList} />
