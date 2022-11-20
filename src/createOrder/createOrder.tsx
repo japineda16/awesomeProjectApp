@@ -2,12 +2,22 @@ import { Box, FlatList, Text, Image, Divider, Button, useToast } from "native-ba
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { postQuery } from "../services/query/query.service";
+import { getAllData, readData } from "../services/storage/AysncStorage.service";
 
 export const CreateOrder = ({route, navigation}) => {
     const toast = useToast();
     const [totalPrice, setTotalPrice] = useState(0);
     const [isLoading, setLoading] = useState(false);
-    let products = route.params;
+    const [products, setProducts] = useState([]);
+
+    const getProducts = async () => {
+        let data: any = await getAllData();
+        for (const item of data) {
+            let product = await readData(item);
+            console.log(product);
+            setProducts([...products, product]);
+        }
+    }
 
     const onConfirmOrder = () => {
         let order = [];
@@ -45,6 +55,10 @@ export const CreateOrder = ({route, navigation}) => {
         for (const item of products) {
             total = total + (item.cart * item.price);
         }
+        const getAllProducts = async () => {
+            await getProducts();
+        }
+        getAllProducts()
         setTotalPrice(total);
     }, []);
 
