@@ -117,7 +117,7 @@ export default function Product({ navigation, route }: any) {
                                     </Select>
                                 </Box>
                                 <Box ml='8%'>
-                                    <NumericInput initValue={cart.quantity} value={cart.quantity} onChange={(value) => onCartChange('quantity', value)}></NumericInput>
+                                    <NumericInput maxValue={productData.product.quantity} initValue={cart.quantity} value={cart.quantity} onChange={(value) => onCartChange('quantity', value)}></NumericInput>
                                 </Box>
                             </Box>
                             <Box flex='2' flexDirection='row'>
