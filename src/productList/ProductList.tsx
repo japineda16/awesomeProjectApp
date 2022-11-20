@@ -1,7 +1,6 @@
-import { Text, Box, ScrollView, Image, Divider, Button, FlatList, Input, IconButton, Icon, Fab } from 'native-base';
+import { Text, Box, Image, Divider, FlatList, Fab } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Alert, RefreshControl } from 'react-native';
-import NumericInput from 'react-native-numeric-input';
 import { getQuery, getStorageItem } from '../services/query/query.service';
 
 export default function ProductList({ navigation, route }) {
@@ -11,7 +10,7 @@ export default function ProductList({ navigation, route }) {
     const [cart, setCart] = useState([]);
     let [page, setPage] = useState(1);
 
-    const getProducts = async () => {
+    const getProducts = async (setPage?: number) => {
         const userId = await getStorageItem('userId');
         setRefreshing(true);
         const {data} = await getQuery('products/user-product/' + userId +'?page=' + page).catch((err) => {
@@ -47,27 +46,6 @@ export default function ProductList({ navigation, route }) {
         navigation.navigate('Crear-orden', products);
         products = [];
         getProducts();
-    }
-
-    const addToCart = (id: string, quantity: number, index: number, item: JSON) => {
-        setCart([...cart, index]);
-        product[index] = {...item, isAdded: true, cart: 1};
-    }
-
-    const onActionAdToCart = (item: any, index: number, quantity: number) => {
-        if (item.isAdded == false || item.isAdded == undefined) {
-            return (<Button 
-            onPress={() => addToCart(item.id, 1, index, item)}
-            width='32' 
-            my='auto' 
-            borderRadius='full'>Ordenar</Button>)
-        } else {
-            return (
-                <NumericInput minValue={0} maxValue={quantity} onChange={ value => {
-                    product[index].cart = value;
-                } }></NumericInput>
-            )
-        }
     }
 
     useEffect(() => {
