@@ -4,9 +4,10 @@ import { Keyboard, StyleSheet, Alert } from "react-native";
 import { getQuery, postQuery } from "../../services/query/query.service";
 import { ClientForm } from "./clientForm";
 
-export const ModalClient = ({status, onClose}) => {
+export const ModalClient = ({status, onClose, onSubmit}) => {
 
     const [position, setPosition] = useState('center');
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -29,11 +30,13 @@ export const ModalClient = ({status, onClose}) => {
     }, []);
 
     const onForm = async (form: JSON) => {
+        setLoading(true);
         const {data} = await postQuery('clients', form).catch((err) => {
-            console.log(err);
+            setLoading(false);
             Alert.alert('Error', 'Ha sucedido un error, por favor vuelva a intentarlo.');
         });
-        console.log(data);
+        setLoading(false);
+        onSubmit(data);
     }
 
     return (
@@ -42,7 +45,7 @@ export const ModalClient = ({status, onClose}) => {
             <Modal.CloseButton></Modal.CloseButton>
                 <Modal.Header>Crear nuevo cliente</Modal.Header>
                 <Modal.Body>
-                    <ClientForm isLoading={false} onForm={onForm}></ClientForm>
+                    <ClientForm isLoading={isLoading} onForm={onForm}></ClientForm>
                 </Modal.Body>
             </Modal.Content>
         </Modal>

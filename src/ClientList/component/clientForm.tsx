@@ -35,7 +35,6 @@ export const ClientForm = ({onForm, isLoading}) => {
       };
 
       const onSubmit = () => {
-        setLoading(true);
         if (validate()) {
             onForm(formData);
             setData({});

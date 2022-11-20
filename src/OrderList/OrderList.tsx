@@ -15,7 +15,6 @@ export default function Order({ navigation })  {
         } );
         setRefreshing(false);
         setOrders(data);
-        console.log(orders);
     }
 
     useEffect( () => {

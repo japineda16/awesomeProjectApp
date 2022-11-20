@@ -1,3 +1,4 @@
+import { useIsFocused } from "@react-navigation/native";
 import { Box, FlatList, Text, Image, Divider, Button, useToast } from "native-base";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
@@ -5,6 +6,7 @@ import { postQuery } from "../services/query/query.service";
 import { getAllData, readData } from "../services/storage/AysncStorage.service";
 
 export const CreateOrder = ({route, navigation}) => {
+    const isFocused = useIsFocused();
     const toast = useToast();
     const [totalPrice, setTotalPrice] = useState(0);
     const [isLoading, setLoading] = useState(false);
@@ -12,11 +14,18 @@ export const CreateOrder = ({route, navigation}) => {
 
     const getProducts = async () => {
         let data: any = await getAllData();
-        for (const item of data) {
-            let product = await readData(item);
-            product = JSON.parse(product);
-            setProducts([...products, product]);
+        const all = [];
+        let total = 0;
+        if (data != null) {
+            for (const item of data) {
+                let product = await readData(item);
+                product = JSON.parse(product);
+                all.push(product);
+                total += (product.price * product.quantity);
+            }
         }
+        setTotalPrice(total);
+        setProducts(all);
     }
 
     const onConfirmOrder = () => {
@@ -51,16 +60,12 @@ export const CreateOrder = ({route, navigation}) => {
     }
 
     useEffect( () => {
-        let total = 0;
-        for (const item of products) {
-            total = total + (item.quantity * item.price);
-        }
+        setProducts([]);
         const getAllProducts = async () => {
             await getProducts();
         }
-        getAllProducts()
-        setTotalPrice(total);
-    }, []);
+        getAllProducts();
+    }, [isFocused]);
 
     return (
         <>

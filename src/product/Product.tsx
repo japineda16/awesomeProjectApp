@@ -1,15 +1,30 @@
 import { Box, Text, Image, Divider, ScrollView, Icon, Button, Select, useToast } from "native-base";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NumericInput from "react-native-numeric-input";
 import {deleteData, readData, saveData} from '../services/storage/AysncStorage.service'
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Product({ navigation, route }: any) {
+    const isFocused = useIsFocused();
     const toast = useToast();
     let productData = route.params.id;
     const [statusCart, onStatusCart] = useState(false);
-    const [cart, setCart] = useState({item: productData.productId, quantity: 0, price: 0, image: productData.product.image, name: productData.product.name});
+    const [cart, setCart] = useState({item: '', quantity: 0, price: 0, image: '', name: ''});
+
+    const onInitProduct = async () => {
+        let findProduct = await readData(productData.productId);
+        if (findProduct != null) {
+            findProduct = JSON.parse(findProduct);
+            setCart({quantity: findProduct.quantity, price: findProduct.price, item: productData.productId, image: productData.product.image, name: productData.product.name});
+            onStatusCart(true);
+        }
+        if (findProduct == null) {
+            setCart({quantity: 0, price: 0, item: productData.productId, image: productData.product.image, name: productData.product.name});
+            onStatusCart(false);
+        }
+    }
 
     const onCartChange = (input: string, data: any) => {
         setCart({...cart, [input]: data});
@@ -58,6 +73,13 @@ export default function Product({ navigation, route }: any) {
             });
         }
     }
+
+    useEffect(() => {
+        const onStart = async () => {
+            await onInitProduct();
+        }
+        onStart();
+    }, [isFocused]);
 
     return (
         <>

@@ -53,7 +53,7 @@ export default function ClientList({ navigation }) {
                     }>Añadir cliente</Button>
             </Box>
         </Box>
-        <ModalClient status={buttonClient} onClose={() => setButtonClient(false)}></ModalClient>
+        <ModalClient onSubmit={onInitClients} status={buttonClient} onClose={() => setButtonClient(false)}></ModalClient>
         </>
     );
 }
