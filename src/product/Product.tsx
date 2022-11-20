@@ -1,4 +1,4 @@
-import { Box, Text, Image, Heading, Divider, ScrollView, Icon, Button, Select } from "native-base";
+import { Box, Text, Image, Divider, ScrollView, Icon, Button, Select, useToast } from "native-base";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { StyleSheet } from "react-native";
 import { useState } from "react";
@@ -6,23 +6,57 @@ import NumericInput from "react-native-numeric-input";
 import {deleteData, readData, saveData} from '../services/storage/AysncStorage.service'
 
 export default function Product({ navigation, route }: any) {
-    const productData = route.params.id;
+    const toast = useToast();
+    let productData = route.params.id;
     const [statusCart, onStatusCart] = useState(false);
-    const [cart, setCart] = useState({item: productData.productId, quantity: 0, price: 0});
+    const [cart, setCart] = useState({item: productData.productId, quantity: 0, price: 0, image: productData.product.image, name: productData.product.name});
 
     const onCartChange = (input: string, data: any) => {
         setCart({...cart, [input]: data});
     }
-    
+
     const onDeleteCart = async () => {
         deleteData(cart.item);
-        setCart({item: cart.item, quantity: 0, price: 0})
+        setCart({item: productData.productId, quantity: 0, price: 0, image: productData.image, name: productData.name});
         onStatusCart(false);
+        toast.show({
+            render: () => {
+                return (
+                <Box backgroundColor='success.500' px={4} py={3}>
+                    <Text color='white'>Se ha borrado exitosamente el carrito.</Text>
+                </Box>
+                )
+
+            }
+        });
     }
 
     const onAddCart = async () => {
-        saveData(cart.item, JSON.stringify(cart));
-        let data = await readData(cart.item);
+        if (cart.price > 0 && cart.quantity > 0) {
+            saveData(cart.item, JSON.stringify(cart));
+            toast.show({
+                render: () => {
+                    return (
+                    <Box backgroundColor='success.500' px={4} py={3}>
+                        <Text color='white'>Se ha agragado al carrito correctamente.</Text>
+                    </Box>
+                    )
+    
+                }
+            });
+        }
+        else {
+            toast.show({
+                render: () => {
+                    return (
+                    <Box backgroundColor='danger.500' px={4} py={3}>
+                        <Text color='white'>Falta que selecciones un precio y/o cantidad</Text>
+                    </Box>
+                    )
+    
+                }
+            });
+        }
     }
 
     return (
@@ -77,9 +111,9 @@ export default function Product({ navigation, route }: any) {
                                         onValueChange={(item) => {
                                             onCartChange('price', item);
                                         }}>
-                                        <Select.Item label={productData.price_1} value={productData.price_1}/>
-                                        <Select.Item label={productData.price_2} value={productData.price_2}/>
-                                        <Select.Item label={productData.price_3} value={productData.price_3}/>
+                                        <Select.Item label={ productData.price_1 + '$' } value={ productData.price_1 }/>
+                                        <Select.Item label={ productData.price_2 + '$' } value={ productData.price_2 } />
+                                        <Select.Item label={ productData.price_3 + '$' } value={ productData.price_3 } />
                                     </Select>
                                 </Box>
                                 <Box ml='8%'>

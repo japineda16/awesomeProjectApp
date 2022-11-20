@@ -14,7 +14,7 @@ export const CreateOrder = ({route, navigation}) => {
         let data: any = await getAllData();
         for (const item of data) {
             let product = await readData(item);
-            console.log(product);
+            product = JSON.parse(product);
             setProducts([...products, product]);
         }
     }
@@ -53,7 +53,7 @@ export const CreateOrder = ({route, navigation}) => {
     useEffect( () => {
         let total = 0;
         for (const item of products) {
-            total = total + (item.cart * item.price);
+            total = total + (item.quantity * item.price);
         }
         const getAllProducts = async () => {
             await getProducts();
@@ -75,13 +75,13 @@ export const CreateOrder = ({route, navigation}) => {
                                     {item.name}
                                 </Text>
                                 <Text bold>
-                                    En carrito: {item.cart}
+                                    En carrito: {item.quantity}
                                 </Text>
                                 <Text fontSize='md'>
                                     Precio unitario: {item.price}
                                 </Text>
                                 <Text>
-                                    Total: {item.cart * item.price}
+                                    Total: {item.quantity * item.price}
                                 </Text>
                             </Box>
                             <Box maxWidth='50%' marginLeft='auto'>
