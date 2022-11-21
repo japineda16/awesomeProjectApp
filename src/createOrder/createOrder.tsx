@@ -100,7 +100,7 @@ export const CreateOrder = ({route, navigation}) => {
                                 <Image
                                 size='xl'
                                 alt='Harina'
-                                source={{uri: 'https://m.media-amazon.com/images/I/61SpU+nb-kL._SX679_PIbundle-2,TopRight,0,0_AA679SH20_.jpg'}} />
+                                source={{uri: item.image}} />
                             </Box>
                             <Divider />
                         </Box>

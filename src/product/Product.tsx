@@ -93,7 +93,7 @@ export default function Product({ navigation, route }: any) {
                         size='2xl'
                         alt='Prueba'
                         marginX='auto'
-                        source={{uri: 'https://m.media-amazon.com/images/I/61SpU+nb-kL._SX679_PIbundle-2,TopRight,0,0_AA679SH20_.jpg'}}/>
+                        source={{uri: productData.product.image}}/>
                     </Box>
                     <Divider width='95%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                     <Box style={styles.informationBody}>
