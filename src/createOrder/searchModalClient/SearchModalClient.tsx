@@ -2,9 +2,8 @@ import { Box, Modal, Text, useToast } from "native-base";
 import { useEffect, useState } from "react";
 import { Keyboard, StyleSheet, Alert } from "react-native";
 import { postQuery } from "../../services/query/query.service";
-import { ClientForm } from "./clientForm";
 
-export const ModalClient = ({status, onClose, onSubmit}) => {
+export const SearchModalClient = ({status, onClose}) => {
     const toast = useToast();
     const [position, setPosition] = useState('center');
     const [isLoading, setLoading] = useState(false);
@@ -29,33 +28,13 @@ export const ModalClient = ({status, onClose, onSubmit}) => {
         };
     }, []);
 
-    const onForm = async (form: JSON) => {
-        setLoading(true);
-        const {data} = await postQuery('clients', form).catch((err) => {
-            setLoading(false);
-            Alert.alert('Error', 'Ha sucedido un error, por favor vuelva a intentarlo.');
-        });
-        toast.show({
-            render: () => {
-                return (
-                <Box backgroundColor='success.500' px={4} py={3}>
-                    <Text color='white'>Se ha agregado exitosamente el cliente.</Text>
-                </Box>
-                )
-
-            }
-        });
-        setLoading(false);
-        onSubmit(data);
-    }
-
     return (
         <Modal isOpen={status} onClose={onClose}>
             <Modal.Content padding='5%' w='80%' {...styles[position]}>
             <Modal.CloseButton></Modal.CloseButton>
-                <Modal.Header>Crear nuevo cliente</Modal.Header>
+                <Modal.Header>Selecciona el cliente a facturar.</Modal.Header>
                 <Modal.Body>
-                    <ClientForm isLoading={isLoading} onForm={onForm}></ClientForm>
+                    <Text>Holaa</Text>
                 </Modal.Body>
             </Modal.Content>
         </Modal>

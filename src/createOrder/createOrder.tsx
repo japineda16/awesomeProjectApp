@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { postQuery } from "../services/query/query.service";
 import { getAllData, readData } from "../services/storage/AysncStorage.service";
+import { SearchModalClient } from "./searchModalClient/SearchModalClient";
 
 export const CreateOrder = ({route, navigation}) => {
     const isFocused = useIsFocused();
@@ -11,6 +12,7 @@ export const CreateOrder = ({route, navigation}) => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [isLoading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
+    const [modal, setModal] = useState(false);
 
     const getProducts = async () => {
         let data: any = await getAllData();
@@ -28,10 +30,15 @@ export const CreateOrder = ({route, navigation}) => {
         setProducts(all);
     }
 
+    const onOpenModal = () => {
+        let settingUpModal = modal ? false : true;
+        setModal(settingUpModal);
+    }
+
     const onConfirmOrder = () => {
         let order = [];
         for (let item of products) {
-            order.push({id: item.id, quantity: item.cart});
+            order.push({id: item.id, quantity: item.quantity});
         }
         const data = {
             orderNumber: Math.floor(Math.random()*90000) + 10000,
@@ -100,11 +107,12 @@ export const CreateOrder = ({route, navigation}) => {
                     } />
                     <Box marginX='3.5' marginBottom='4'>
                         <Text fontSize='3xl'>Total: {totalPrice}</Text>
-                        <Button isLoading={isLoading} onPress={onConfirmOrder}>
+                        <Button isLoading={isLoading} onPress={onOpenModal}>
                             <Text color='white' fontSize='lg'>Confirmar orden</Text>
                         </Button>
                     </Box>
             </Box>
+            <SearchModalClient status={modal} onClose={onOpenModal} ></SearchModalClient>
         </>
     );
 }
