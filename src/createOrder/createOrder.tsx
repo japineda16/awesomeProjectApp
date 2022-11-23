@@ -35,7 +35,8 @@ export const CreateOrder = ({route, navigation}) => {
         setModal(settingUpModal);
     }
 
-    const onConfirmOrder = () => {
+    const onConfirmOrder = (client: string) => {
+        onOpenModal();
         let order = [];
         for (let item of products) {
             order.push({id: item.id, quantity: item.quantity});
@@ -43,7 +44,8 @@ export const CreateOrder = ({route, navigation}) => {
         const data = {
             orderNumber: Math.floor(Math.random()*90000) + 10000,
             total: totalPrice,
-            products: order
+            products: order,
+            client: client
         }
         onSubmitData(data);
     }
@@ -59,7 +61,7 @@ export const CreateOrder = ({route, navigation}) => {
         toast.show({
             render: () => {
                 return <Box backgroundColor='success.500' px={4} py={3}>
-                    <Text color='white'>Se ha creado exitosamente la orden {query.data.orderNumber} .</Text>
+                    <Text color='white'>Se ha creado exitosamente la orden {query.data.orderNumber}.</Text>
                 </Box>
             }
         });
@@ -112,7 +114,7 @@ export const CreateOrder = ({route, navigation}) => {
                         </Button>
                     </Box>
             </Box>
-            <SearchModalClient status={modal} onClose={onOpenModal} ></SearchModalClient>
+            <SearchModalClient status={modal} onClose={onOpenModal} onSelectedClient={ (value: string) => onConfirmOrder(value) }></SearchModalClient>
         </>
     );
 }

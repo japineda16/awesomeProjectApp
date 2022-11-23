@@ -14,7 +14,7 @@ export default function ClientList({ navigation }) {
             Alert.alert('Error', 'Ha sucedido un error desconocido, vuelva a intentarlo.');
             console.log(err);
         });
-        setClients(data[1])
+        setClients(data[1]);
     }
     
     useEffect( () => {

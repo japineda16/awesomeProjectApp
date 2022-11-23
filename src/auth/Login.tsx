@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Text, Box, ScrollView, View, Input, Button } from 'native-base';
+import { Text, Box, ScrollView, View, Input, Button, useToast } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Alert } from "react-native";
 import { getStorageItem, postQuery, saveStorageItem } from '../services/query/query.service';
@@ -8,7 +8,7 @@ export default function Login({ navigation }) {
 
     const [userData, setUserData] = useState({email: '', password: '', invalid: false});
     const [isLoading, setLoading] = useState(false);
-    const [loadingAlert, setLoadingAlert] = useState(true);
+    const toast = useToast();
 
     const checkSession = async () => {
       const refreshToken = await getStorageItem('refreshToken') || undefined;
@@ -51,8 +51,14 @@ export default function Login({ navigation }) {
         }
         if (userData.email === "" || userData.email === "") {
           setLoading(false);
-          console.log('No has llenado uno de estos datos');
-          setUserData({...userData, invalid: false});
+          setUserData({...userData, invalid: true});
+          toast.show({
+            render: () => {
+              return <Box backgroundColor='warning.400' w='95%' px={4} py={3}>
+                  <Text color='white' textAlign='center'>No has llenado correctamente el formulario de inicio de sesión.</Text>
+              </Box>
+            }
+          });
         }
     }
 
@@ -72,7 +78,7 @@ export default function Login({ navigation }) {
                     Para ingresar a la aplicación y ver el listado de productos, por favor, 
                     inicie sesión.
                 </Text>
-                <Input variant="rounded" marginTop='5' 
+                <Input variant="rounded" marginTop='5'
                 onChangeText={(value) => handleForm('email', value)}
                 size="xl" placeholder="Email" type='text' />
                 <Input variant="rounded" marginTop='2'
