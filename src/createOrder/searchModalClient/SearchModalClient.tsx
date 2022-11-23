@@ -1,4 +1,4 @@
-import { Button, Modal, Text, Input, Box, Pressable } from "native-base";
+import { Button, Modal, Text, Input, Box, Pressable, Divider } from "native-base";
 import { useEffect, useState } from "react";
 import { Keyboard, StyleSheet, TouchableOpacity } from "react-native";
 import { getQuery, postQuery } from "../../services/query/query.service";
@@ -69,16 +69,18 @@ export const SearchModalClient = ({status, onClose, onSelectedClient}) => {
                     {
                     filterClientList.map( (item, index) => {
                         return (
-                            <Pressable
-                            backgroundColor={index % 2 ? 'transparent' : 'gray.100'}
-                            style={styles.TouchableOpacity}
-                            key={item.id}
-                            onPress={() => console.log(item.id)}>
-                              <Text
-                                >
-                                {item?.name || ''}
-                              </Text>
-                          </Pressable>
+                            <Box>
+                                <TouchableOpacity
+                                    style={styles.TouchableOpacity}
+                                    key={item.id}
+                                    onPress={() => onSelectedClient(item.id)}>
+                                    <Text
+                                        >
+                                        {item?.name || ''}
+                                    </Text>
+                                </TouchableOpacity>
+                                <Divider />
+                            </Box>
                         )
                     })
                     }
@@ -97,7 +99,6 @@ const styles = StyleSheet.create({
       TouchableOpacity: {
         paddingVertical: 8,
         paddingHorizontal: 10,
-        borderBottomWidth: 0.2,
         borderBottomColor: '#78716c'
       }
 });

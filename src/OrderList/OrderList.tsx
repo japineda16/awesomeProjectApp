@@ -37,8 +37,8 @@ export default function Order({ navigation })  {
                                 }} fontSize='xl' fontWeight='semibold'>
                                     Orden {item.orderNumber}
                                 </Text>
-                                <Text>Cliente: Jose Pineda</Text>
-                                <Text>Dirección: Naguanagua, Tazajal.</Text>
+                                <Text>Cliente: {item.client?.name}</Text>
+                                <Text>Dirección: {item.client?.address}</Text>
                             </Box>
                             <Divider></Divider>
                         </Box>

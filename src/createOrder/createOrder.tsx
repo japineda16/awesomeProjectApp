@@ -3,7 +3,7 @@ import { Box, FlatList, Text, Image, Divider, Button, useToast } from "native-ba
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { postQuery } from "../services/query/query.service";
-import { getAllData, readData } from "../services/storage/AysncStorage.service";
+import { getAllData, readData, resetData } from "../services/storage/AysncStorage.service";
 import { SearchModalClient } from "./searchModalClient/SearchModalClient";
 
 export const CreateOrder = ({route, navigation}) => {
@@ -39,7 +39,7 @@ export const CreateOrder = ({route, navigation}) => {
         onOpenModal();
         let order = [];
         for (let item of products) {
-            order.push({id: item.id, quantity: item.quantity});
+            order.push({productId: item.item, quantity: item.quantity, price: item.price});
         }
         const data = {
             orderNumber: Math.floor(Math.random()*90000) + 10000,
@@ -54,7 +54,7 @@ export const CreateOrder = ({route, navigation}) => {
         setLoading(true);
         const query = await postQuery('orders', data).catch( (e) => {
             setLoading(false);
-            console.log(e)
+            console.log(e.response.data)
             Alert.alert('Error', 'No se ha podido realizar la petición, vuelva a intentarlo mas tarde.');
         } );
         setLoading(false);
@@ -65,7 +65,8 @@ export const CreateOrder = ({route, navigation}) => {
                 </Box>
             }
         });
-        navigation.navigate('Lista de ordenes');
+        await resetData();
+        navigation.navigate('Ordenes');
     }
 
     useEffect( () => {

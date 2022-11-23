@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'native-base';
 
 export const saveData = async (key: string, data: any) => {
     try {
@@ -31,5 +32,14 @@ export const deleteData = async (key: string) => {
         await AsyncStorage.removeItem(key)
       } catch(e) {
         // remove error
+        Alert('No se puedo borrar del carrito.');
       }
+}
+
+export const resetData =async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (error) {
+    Alert('No se pudo resetear todo el carrito');
+  }
 }
