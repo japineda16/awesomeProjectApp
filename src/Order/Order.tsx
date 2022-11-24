@@ -1,66 +1,64 @@
+import { useIsFocused } from "@react-navigation/native";
 import { Box, Divider, Heading, Text, Icon, ScrollView, Image } from "native-base";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
+import { getQuery } from "../services/query/query.service";
 
-export default function Order()  {
+export default function Order({ navigation, route })  {
+    const [products, setProducts] = useState([]);
+    let data = route.params;
+    const isFocused = useIsFocused();
+    
+    const getOrder =  async () => {
+        const {data} = await getQuery('orders/' + route.params.id).catch((e) => {
+            alert('Hubo un error, por favor vuelva a intentarlo')
+        });
+        setProducts(data);
+    }
+    useEffect( () => {
+        const init = () => {
+            getOrder();
+            data = route.params;
+        }
+        init();
+    }, [isFocused]);
     return (
         <>
         <Box style={styles.body} backgroundColor='blueGray.100'>
-            <Text style={styles.titleOrder} fontSize='2xl'>Orden 12345</Text>
+            <Box style={styles.titleOrder}>
+                <Text fontSize='2xl' bold>Orden {data.orderNumber}</Text>
+                <Text fontSize='xl'>Datos del cliente</Text>
+                <Text fontSize='lg'>{data.client.name}</Text>
+                <Text fontSize='lg'>{data.client.address}</Text>
+                <Text fontSize='lg'>{data.client.phone}</Text>
+                <Text fontSize='lg'>{data.client.mail}</Text>
+            </Box>
             <Box backgroundColor='white'>
                 <Box style={styles.bodyStructure}>
                     <Divider></Divider>
                     <ScrollView  height='full'>
 
-                        <Box flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
-                            <Box marginX={3} marginY={2.5} width='1/3'>
-                                <Image
-                                width='full'
-                                height='full'
-                                source={{uri: 'https://s3.us-east-2.amazonaws.com/forpi.co/AA310300101-B3.jpg'}}
-                                alt='prueba'></Image>
-                            </Box>
-                            <Box marginX={3} marginY={2.5} width='3/5'>
-                                <Box marginY='auto'>
-                                    <Text fontSize='lg' fontWeight='bold'>Harina Pan</Text>
-                                    <Text fontSize='md'>Cantidad: 5</Text>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Divider my={1.5}></Divider>
-
-                        <Box flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
-                            <Box marginX={3} marginY={2.5} width='1/3'>
-                                <Image
-                                width='full'
-                                height='full'
-                                source={{uri: 'https://s3.us-east-2.amazonaws.com/forpi.co/AA310300101-B3.jpg'}}
-                                alt='prueba'></Image>
-                            </Box>
-                            <Box marginX={3} marginY={2.5} width='3/5'>
-                                <Box marginY='auto'>
-                                    <Text fontSize='lg' fontWeight='bold'>Lorem Ipsum dolor</Text>
-                                    <Text fontSize='md'>Cantidad: 5</Text>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Divider my={1.5}></Divider>
-
-                        <Box flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
-                            <Box marginX={3} marginY={2.5} width='1/3'>
-                                <Image
-                                width='full'
-                                height='full'
-                                source={{uri: 'https://s3.us-east-2.amazonaws.com/forpi.co/AA310300101-B3.jpg'}}
-                                alt='prueba'></Image>
-                            </Box>
-                            <Box marginX={3} marginY={2.5} width='3/5'>
-                                <Box marginY='auto'>
-                                    <Text fontSize='lg' fontWeight='bold'>Lorem Ipsum dolor</Text>
-                                    <Text fontSize='md'>Cantidad: 5</Text>
-                                </Box>
-                            </Box>
-                        </Box>
-                        <Divider my={1.5}></Divider>
+                    {
+                        products.map( (item, index) => {
+                            return (
+                                <><Box flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
+                                    <Box marginX={3} marginY={2.5} width='1/3'>
+                                        <Image
+                                            width='full'
+                                            height='full'
+                                            source={{ uri: item.product.image }}
+                                            alt='prueba'></Image>
+                                    </Box>
+                                    <Box marginX={3} marginY={2.5} width='3/5'>
+                                        <Box marginY='auto'>
+                                            <Text fontSize='lg' fontWeight='bold'>{item.product.name}</Text>
+                                            <Text fontSize='md'>Cantidad: {item.quantity}</Text>
+                                        </Box>
+                                    </Box>
+                                </Box><Divider my={1.5}></Divider></>
+                            )
+                        } )
+                    }
 
                     </ScrollView>
                 </Box>

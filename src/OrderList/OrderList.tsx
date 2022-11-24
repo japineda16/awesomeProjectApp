@@ -33,7 +33,7 @@ export default function Order({ navigation })  {
                         <Box padding={0.5}>
                             <Box marginY={5}>
                                 <Text onPress={() => {
-                                    navigation.navigate('Orden');
+                                    navigation.navigate('Orden', item);
                                 }} fontSize='xl' fontWeight='semibold'>
                                     Orden {item.orderNumber}
                                 </Text>

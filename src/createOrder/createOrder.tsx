@@ -2,7 +2,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { Box, FlatList, Text, Image, Divider, Button, useToast } from "native-base";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { postQuery } from "../services/query/query.service";
+import { postQuery, getStorageItem } from "../services/query/query.service";
 import { getAllData, readData, resetData } from "../services/storage/AysncStorage.service";
 import { SearchModalClient } from "./searchModalClient/SearchModalClient";
 
@@ -35,11 +35,17 @@ export const CreateOrder = ({route, navigation}) => {
         setModal(settingUpModal);
     }
 
-    const onConfirmOrder = (client: string) => {
+    const onConfirmOrder = async (client: string) => {
         onOpenModal();
         let order = [];
+        const userId = await getStorageItem('userId');
         for (let item of products) {
-            order.push({productId: item.item, quantity: item.quantity, price: item.price});
+            order.push({
+                productId: item.item,
+                quantity: item.quantity,
+                price: item.price,
+                userId: userId
+            });
         }
         const data = {
             orderNumber: Math.floor(Math.random()*90000) + 10000,
