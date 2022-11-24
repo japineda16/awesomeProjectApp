@@ -43,16 +43,17 @@ export const CreateOrder = ({route, navigation}) => {
             order.push({
                 productId: item.item,
                 quantity: item.quantity,
-                price: item.price,
-                userId: userId
+                price: item.price
             });
         }
         const data = {
             orderNumber: Math.floor(Math.random()*90000) + 10000,
             total: totalPrice,
             products: order,
-            client: client
+            client: client,
+            userId: userId
         }
+        // console.log(data.products);
         onSubmitData(data);
     }
 
