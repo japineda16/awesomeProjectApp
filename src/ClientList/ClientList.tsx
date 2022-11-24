@@ -35,7 +35,7 @@ export default function ClientList({ navigation }) {
                 data={clients} renderItem={ ({item, index}) => 
                     <Box backgroundColor={index % 2 ? 'gray.100' : 'white'} width='full' padding='6'>
                         <Text fontSize='xl' onPress={() => {
-                            navigation.navigate('Cliente');
+                            navigation.navigate('Cliente', item);
                         }} bold>{item.name}</Text>
                         <Text fontSize='md'>{item.address}</Text>
                     </Box>
