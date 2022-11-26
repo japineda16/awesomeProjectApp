@@ -7,44 +7,22 @@ export default function ProductList({ navigation, route }) {
 
     const [product, setProducts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [cart, setCart] = useState([]);
     let [page, setPage] = useState(1);
 
-    const getProducts = async (setPage?: number) => {
+    const getProducts = async () => {
         const userId = await getStorageItem('userId');
         setRefreshing(true);
         const {data} = await getQuery('products/user-product/' + userId +'?page=' + page).catch((err) => {
             setRefreshing(false);
             Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
         });
+        if (data.length <= 0) setPage(page--);
+        if (data.length > 0) setProducts([...data]);
         setRefreshing(false);
-        setCart([]);
-        setProducts([...data]);
-    }
-
-    const displayReportButton = () => {
-        if (Object.keys(cart).length != 0) {
-            return (<Fab
-                    onPress={() => createOrder()}
-                    borderRadius='full'
-                    right='25%' w='1/2' bottom='10%' label={
-                        <Text color='white' fontSize='md'>Crear orden</Text>
-                    } />);
-        }
     }
 
     const onScroll = () => {
         setPage(page++);
-        console.log(page);
-    }
-
-    const createOrder = () => {
-        let products: any[] = [];
-        for (let item of cart) {
-            products.push(product[item]);
-        }
-        navigation.navigate('Crear-orden', products);
-        products = [];
         getProducts();
     }
 
@@ -94,7 +72,6 @@ export default function ProductList({ navigation, route }) {
                         refreshing={refreshing}
                         onRefresh={getProducts}/>
                         } />
-                        {displayReportButton()}
             </Box>
         </Box>
     );
