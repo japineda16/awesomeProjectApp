@@ -41,7 +41,7 @@ export default function Order({ navigation, route })  {
                     {
                         products.map( (item, index) => {
                             return (
-                                <><Box flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
+                                <><Box key={item.id} flex={2} flexDirection='row' height='32' my={1.5} backgroundColor='white'>
                                     <Box marginX={3} marginY={2.5} width='1/3'>
                                         <Image
                                             width='full'

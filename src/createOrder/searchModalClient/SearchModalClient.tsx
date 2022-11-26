@@ -69,7 +69,7 @@ export const SearchModalClient = ({status, onClose, onSelectedClient}) => {
                     {
                     filterClientList.map( (item, index) => {
                         return (
-                            <Box>
+                            <Box key={item.id}>
                                 <TouchableOpacity
                                     style={styles.TouchableOpacity}
                                     key={item.id}

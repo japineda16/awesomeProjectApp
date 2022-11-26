@@ -10,7 +10,6 @@ export default function Client({navigation, route}) {
     let client = route.params;
     const [page, setPage] = useState(1);
     const [products, setProducts] = useState([]);
-    console.log(client);
 
     const getClient = async () => {
         const {data} = await getQuery('orders/user/' + client.id + '?page=' + page).catch(e => {

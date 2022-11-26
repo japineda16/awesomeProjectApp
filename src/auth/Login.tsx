@@ -12,7 +12,6 @@ export default function Login({ navigation }) {
 
     const checkSession = async () => {
       const refreshToken = await getStorageItem('refreshToken') || undefined;
-      console.log(refreshToken);
       if (refreshToken != undefined) {
         let {data} = await postQuery('auth/token', {refreshToken: refreshToken}).catch( err => {
           console.log(err);
