@@ -1,4 +1,4 @@
-import { Text, Box, Image, Divider, FlatList, Fab } from 'native-base';
+import { Text, Box, Image, Divider, FlatList } from 'native-base';
 import { useEffect, useState } from 'react';
 import { Alert, RefreshControl } from 'react-native';
 import { getQuery, getStorageItem } from '../services/query/query.service';
@@ -7,23 +7,26 @@ export default function ProductList({ navigation, route }) {
 
     const [product, setProducts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    let [page, setPage] = useState(1);
+    let [page, setPage] = useState({current: 1, finalItem: 0, skip: 0});
 
     const getProducts = async () => {
         const userId = await getStorageItem('userId');
+        const skip = (page.current * 5) - 5;
         setRefreshing(true);
-        const {data} = await getQuery('products/user-product/' + userId +'?page=' + page).catch((err) => {
+        const {data} = await getQuery('products/user-product/' + userId +'?page=' + page.current).catch((err) => {
             setRefreshing(false);
             Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
         });
-        if (data.length <= 0) setPage(page--);
-        if (data.length > 0) setProducts([...data]);
+        setPage({...page, finalItem: data.count, skip: skip});
+        if (data.products != 0) setProducts([...product, ...data.products]);
         setRefreshing(false);
     }
 
     const onScroll = () => {
-        setPage(page++);
-        getProducts();
+        if (page.finalItem >= page.skip) {
+            getProducts();
+        }
+        setPage({...page, current: page.current++});
     }
 
     useEffect(() => {
