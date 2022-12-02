@@ -8,15 +8,25 @@ export default function ClientList({ navigation }) {
     const [buttonClient, setButtonClient] = useState(false);
     const [clients, setClients] = useState([]);
     const [refreshing, setRefresh] = useState(false);
+    let [page, setPage] = useState({current: 1, finalItem: 0, skip: 0});
 
     const onInitClients = async () => {
-        const {data} = await getQuery('clients?page=1').catch((err) => {
+        const skip = (page.current * 25) - 25;
+        const {data} = await getQuery('clients?page=' + page.current).catch((err) => {
             Alert.alert('Error', 'Ha sucedido un error desconocido, vuelva a intentarlo.');
             console.log(err);
         });
+        setPage({...page, finalItem: data.count, skip: skip});
         setClients(data[1]);
     }
     
+    const onScroll = () => {
+        if (page.finalItem >= page.skip) {
+            onInitClients();
+        }
+        setPage({...page, current: page.current++});
+    }
+
     useEffect( () => {
         onInitClients();
     }, []);
@@ -40,6 +50,7 @@ export default function ClientList({ navigation }) {
                         <Text fontSize='md'>{item.address}</Text>
                     </Box>
                 }
+                onEndReached={onScroll}
                 refreshControl={
                     <RefreshControl 
                     onRefresh={onInitClients}

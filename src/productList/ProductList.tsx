@@ -11,7 +11,7 @@ export default function ProductList({ navigation, route }) {
 
     const getProducts = async () => {
         const userId = await getStorageItem('userId');
-        const skip = (page.current * 5) - 5;
+        const skip = (page.current * 25) - 25;
         setRefreshing(true);
         const {data} = await getQuery('products/user-product/' + userId +'?page=' + page.current).catch((err) => {
             setRefreshing(false);
@@ -20,6 +20,16 @@ export default function ProductList({ navigation, route }) {
         setPage({...page, finalItem: data.count, skip: skip});
         if (data.products != 0) setProducts([...product, ...data.products]);
         setRefreshing(false);
+    }
+
+    const onRefresh = async () => {
+        const userId = await getStorageItem('userId');
+        const {data} = await getQuery('products/user-product/' + userId +'?page=1').catch((err) => {
+            setRefreshing(false);
+            Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
+        });
+        setPage({current: 1, finalItem: 0, skip: 0});
+        setProducts(data.products);
     }
 
     const onScroll = () => {
@@ -73,7 +83,7 @@ export default function ProductList({ navigation, route }) {
                     refreshControl={
                         <RefreshControl
                         refreshing={refreshing}
-                        onRefresh={getProducts}/>
+                        onRefresh={onRefresh}/>
                         } />
             </Box>
         </Box>
