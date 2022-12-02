@@ -3,7 +3,7 @@ import { Box, FlatList, Text, Image, Divider, Button, useToast } from "native-ba
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { postQuery, getStorageItem } from "../services/query/query.service";
-import { getAllData, readData, resetData } from "../services/storage/AysncStorage.service";
+import { getAllData, readData, resetData, deleteData } from "../services/storage/AysncStorage.service";
 import { SearchModalClient } from "./searchModalClient/SearchModalClient";
 
 export const CreateOrder = ({route, navigation}) => {
@@ -28,6 +28,11 @@ export const CreateOrder = ({route, navigation}) => {
         }
         setTotalPrice(total);
         setProducts(all);
+    }
+
+    const onDeleteProduct = async (item: string) => {
+        await deleteData(item);
+        await getProducts();
     }
 
     const onOpenModal = () => {
@@ -72,6 +77,7 @@ export const CreateOrder = ({route, navigation}) => {
                 </Box>
             }
         });
+        console.log(query.data);
         await resetData();
         navigation.navigate('Ordenes');
     }
@@ -105,6 +111,9 @@ export const CreateOrder = ({route, navigation}) => {
                                 <Text>
                                     Total: {item.quantity * item.price}
                                 </Text>
+                                <Button backgroundColor='danger.500'
+                                onPress={() => onDeleteProduct(item.item) }
+                                w='20'>Borrar</Button>
                             </Box>
                             <Box maxWidth='50%' marginLeft='auto'>
                                 <Image
