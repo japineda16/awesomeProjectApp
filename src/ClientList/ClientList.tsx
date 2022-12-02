@@ -17,9 +17,17 @@ export default function ClientList({ navigation }) {
             console.log(err);
         });
         setPage({...page, finalItem: data.count, skip: skip});
+        setClients([...clients ,data[1]]);
+    }
+
+    const onRefresh = async () => {
+        const {data} = await getQuery('clients?page=1').catch((err) => {
+            Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
+        });
+        setPage({current: 1, finalItem: 0, skip: 0});
         setClients(data[1]);
     }
-    
+
     const onScroll = () => {
         if (page.finalItem >= page.skip) {
             onInitClients();
@@ -53,7 +61,7 @@ export default function ClientList({ navigation }) {
                 onEndReached={onScroll}
                 refreshControl={
                     <RefreshControl 
-                    onRefresh={onInitClients}
+                    onRefresh={onRefresh}
                     refreshing={refreshing}/>
                 }
                 />
