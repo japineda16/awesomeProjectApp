@@ -111,7 +111,7 @@ export const CreateOrder = ({route, navigation}) => {
                                 <Text>
                                     Total: {item.quantity * item.price}
                                 </Text>
-                                <Button backgroundColor='danger.500'
+                                <Button mb='1.5' backgroundColor='danger.500'
                                 onPress={() => onDeleteProduct(item.item) }
                                 w='20'>Borrar</Button>
                             </Box>

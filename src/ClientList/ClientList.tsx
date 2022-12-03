@@ -11,16 +11,17 @@ export default function ClientList({ navigation }) {
     let [page, setPage] = useState({current: 1, finalItem: 0, skip: 0});
 
     const onInitClients = async () => {
-        const skip = (page.current * 25) - 25;
+        const skip = (page.current * 5) - 5;
         const {data} = await getQuery('clients?page=' + page.current).catch((err) => {
             Alert.alert('Error', 'Ha sucedido un error desconocido, vuelva a intentarlo.');
             console.log(err);
         });
         setPage({...page, finalItem: data.count, skip: skip});
-        setClients([...clients ,data[1]]);
+        if (data[1] != 0) setClients([...clients, ...data[1]]);
     }
 
     const onRefresh = async () => {
+        setClients([]);
         const {data} = await getQuery('clients?page=1').catch((err) => {
             Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
         });
@@ -30,9 +31,9 @@ export default function ClientList({ navigation }) {
 
     const onScroll = () => {
         if (page.finalItem >= page.skip) {
+            setPage({...page, current: page.current++});
             onInitClients();
         }
-        setPage({...page, current: page.current++});
     }
 
     useEffect( () => {
@@ -59,6 +60,7 @@ export default function ClientList({ navigation }) {
                     </Box>
                 }
                 onEndReached={onScroll}
+                onEndReachedThreshold={0}
                 refreshControl={
                     <RefreshControl 
                     onRefresh={onRefresh}
@@ -72,7 +74,7 @@ export default function ClientList({ navigation }) {
                     }>Añadir cliente</Button>
             </Box>
         </Box>
-        <ModalClient onSubmit={onInitClients} status={buttonClient} onClose={() => setButtonClient(false)}></ModalClient>
+        <ModalClient onSubmit={onRefresh} status={buttonClient} onClose={() => setButtonClient(false)}></ModalClient>
         </>
     );
 }
