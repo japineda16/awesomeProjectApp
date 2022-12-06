@@ -5,20 +5,37 @@ import { StyleSheet } from 'react-native';
 import { getQuery } from "../services/query/query.service";
 
 
-export default function Client({navigation, route}) {
+export default function Client({navigation, route, prop}) {
     const isFocus = useIsFocused();
     let client = route.params;
-    const [page, setPage] = useState(1);
+    let [page, setPage] = useState({current: 1, finalItem: 0, skip: 0});
     const [products, setProducts] = useState([]);
 
     const getClient = async () => {
-        const {data} = await getQuery('orders/client/' + client.id + '?page=' + page).catch(e => {
+        const {data} = await getQuery('orders/client/' + client.id + '?page=' + page.current).catch(e => {
             if (e.response.status != 404) {
                 alert('No se ha podido cargar la informacion del cliente.');
                 console.log(e.response.data)
             }
         })
         setProducts(data);
+    }
+
+    const onReload =async () => {
+        const skip = (page.current * 5) - 5;
+        const {data} = await getQuery('orders/client/' + client.id + '?page=' + page.current).catch(e => {
+            if (e.response.status != 404) {
+                alert('No se ha podido cargar la informacion del cliente.');
+                console.log(e.response.data)
+            }
+        })
+        setPage({...page, finalItem: data[1], skip: skip});
+        setProducts([...products, ...data]);
+    }
+
+    const onScroll = async () => {
+        setPage({...page, current: page.current++});
+        await onReload();
     }
 
     const emptyClient = () => {
@@ -49,7 +66,10 @@ export default function Client({navigation, route}) {
                 </Box>
                 <Box style={styles.body} paddingX='6'>
                     {emptyClient()}
-                    <FlatList data={products} renderItem={ ({item, index}) => 
+                    <FlatList data={products} 
+                    onEndReached={onScroll}
+                    onEndReachedThreshold={0}
+                    renderItem={ ({item, index}) => 
                         <Box>
                             <Divider width='100%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
                             <Box width='full' paddingX='1'>
