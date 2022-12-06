@@ -12,13 +12,21 @@ export default function Client({navigation, route}) {
     const [products, setProducts] = useState([]);
 
     const getClient = async () => {
-        const {data} = await getQuery('orders/user/' + client.id + '?page=' + page).catch(e => {
+        const {data} = await getQuery('orders/client/' + client.id + '?page=' + page).catch(e => {
             if (e.response.status != 404) {
                 alert('No se ha podido cargar la informacion del cliente.');
                 console.log(e.response.data)
             }
         })
         setProducts(data);
+    }
+
+    const emptyClient = () => {
+        if (products.length == 0) {
+            return (
+                <Text>Este cliente todavía no tiene ordenes creadas.</Text>
+            )
+        }
     }
 
     useEffect(() => {
@@ -40,6 +48,7 @@ export default function Client({navigation, route}) {
                     </Box>
                 </Box>
                 <Box style={styles.body} paddingX='6'>
+                    {emptyClient()}
                     <FlatList data={products} renderItem={ ({item, index}) => 
                         <Box>
                             <Divider width='100%' marginX='auto' my="2" _light={{bg: "muted.300"}} _dark={{bg: "muted.50"}} />
