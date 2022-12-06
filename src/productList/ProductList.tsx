@@ -33,10 +33,8 @@ export default function ProductList({ navigation, route }) {
     }
 
     const onScroll = () => {
-        if (page.finalItem >= page.skip) {
-            setPage({...page, current: page.current++});
-            getProducts();
-        }
+        setPage({...page, current: page.current++});
+        getProducts();
     }
 
     useEffect(() => {

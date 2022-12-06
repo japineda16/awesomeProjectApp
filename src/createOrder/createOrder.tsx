@@ -58,7 +58,6 @@ export const CreateOrder = ({route, navigation}) => {
             client: client,
             userId: userId
         }
-        // console.log(data.products);
         onSubmitData(data);
     }
 
@@ -77,7 +76,6 @@ export const CreateOrder = ({route, navigation}) => {
                 </Box>
             }
         });
-        console.log(query.data);
         await resetData();
         navigation.navigate('Ordenes');
     }

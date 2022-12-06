@@ -9,7 +9,7 @@ export default function Order({ navigation })  {
     let [page, setPage] = useState({current: 1, finalItem: 0, skip: 0});
 
     const getOrders = async () => {
-        const skip = (page.current * 5) - 5;
+        const skip = (page.current * 25) - 25;
         setRefreshing(true);
         const {data} = await getQuery('orders?page=' + page.current).catch( () => {
             Alert.alert('Error', 'No se pudo realizar la petición, por favor vuelva a intentarlo.');
@@ -30,10 +30,8 @@ export default function Order({ navigation })  {
     }
 
     const onScroll = () => {
-        if (page.finalItem >= page.skip) {
-            setPage({...page, current: page.current++});
-            getOrders();
-        }
+        setPage({...page, current: page.current++});
+        getOrders();
     }
 
     useEffect( () => {
