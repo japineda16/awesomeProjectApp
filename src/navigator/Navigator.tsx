@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 
 export function TabsNavigator() {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator backBehavior='initialRoute'>
             <Tab.Screen name='Inicio-de-sesion' component={Login} options={{
                 title: 'Inicio de sesión', 
                 tabBarStyle: { display: "none" },

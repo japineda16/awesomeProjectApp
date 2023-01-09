@@ -19,9 +19,10 @@ export default function Client({navigation, route, prop}) {
             }
         })
         setProducts(data);
+        console.log(data)
     }
 
-    const onReload =async () => {
+    const onReload = async () => {
         const skip = (page.current * 5) - 5;
         const {data} = await getQuery('orders/client/' + client.id + '?page=' + page.current).catch(e => {
             if (e.response.status != 404) {
@@ -50,6 +51,7 @@ export default function Client({navigation, route, prop}) {
         const init = () => {
             client = route.params;
             setProducts([]);
+            setPage({current: 1, finalItem: 0, skip: 0});
             getClient();
         }
         init();

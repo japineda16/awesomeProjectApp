@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 //const baseUrl = 'https://api-demo-ventas.katalogo.vip/';
-const baseUrl = 'http://localhost:3000/';
+const baseUrl = 'http://127.0.0.1:3000/';
 
 export const getQuery = (uri: string, params?: any, settings?: any): Promise<any> => {
     return axios.get(baseUrl + uri, settings);
